@@ -79,6 +79,13 @@ declare interface Props {
    * HTML attribute class
    */
   className?: string
+
+  /**
+   * Whether or not to move card with mouse or touch.
+   *
+   * @default false
+   */
+  disableSwipe?: boolean
 }
 
 declare const TinderCard: React.FC<Props>

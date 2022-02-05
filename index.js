@@ -142,7 +142,7 @@ const mouseCoordinatesFromEvent = (e) => {
   return { x: e.clientX, y: e.clientY }
 }
 
-const TinderCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, onCardLeftScreen, className, preventSwipe = [], swipeRequirementType = 'velocity', swipeThreshold = settings.swipeThreshold, onSwipeRequirementFulfilled, onSwipeRequirementUnfulfilled }, ref) => {
+const TinderCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, onCardLeftScreen, className, preventSwipe = [], swipeRequirementType = 'velocity', swipeThreshold = settings.swipeThreshold, onSwipeRequirementFulfilled, onSwipeRequirementUnfulfilled, disableSwipe = false }, ref) => {
   settings.swipeThreshold = swipeThreshold
   const swipeAlreadyReleased = React.useRef(false)
 
@@ -208,18 +208,22 @@ const TinderCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, o
     let mouseIsClicked = false
     let swipeThresholdFulfilledDirection = 'none'
 
-    element.current.addEventListener(('touchstart'), (ev) => {
-      ev.preventDefault()
-      handleSwipeStart()
-      offset = { x: -touchCoordinatesFromEvent(ev).x, y: -touchCoordinatesFromEvent(ev).y }
-    })
+    if (!disableSwipe) {
+      element.current.addEventListener(('touchstart'), (ev) => {
+        ev.preventDefault()
+        handleSwipeStart()
+        offset = { x: -touchCoordinatesFromEvent(ev).x, y: -touchCoordinatesFromEvent(ev).y }
+      })
+    }
 
-    element.current.addEventListener(('mousedown'), (ev) => {
-      ev.preventDefault()
-      mouseIsClicked = true
-      handleSwipeStart()
-      offset = { x: -mouseCoordinatesFromEvent(ev).x, y: -mouseCoordinatesFromEvent(ev).y }
-    })
+    if (!disableSwipe) {
+      element.current.addEventListener(('mousedown'), (ev) => {
+        ev.preventDefault()
+        mouseIsClicked = true
+        handleSwipeStart()
+        offset = { x: -mouseCoordinatesFromEvent(ev).x, y: -mouseCoordinatesFromEvent(ev).y }
+      })
+    }
 
     const handleMove = (coordinates) => {
       // Check fulfillment
