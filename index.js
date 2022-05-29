@@ -245,38 +245,41 @@ const TinderCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, o
       lastLocation = newLocation
     }
 
-    element.current.addEventListener(('touchmove'), (ev) => {
-      ev.preventDefault()
-      handleMove(touchCoordinatesFromEvent(ev))
-    })
 
-    element.current.addEventListener(('mousemove'), (ev) => {
-      ev.preventDefault()
-      if (mouseIsClicked) {
-        handleMove(mouseCoordinatesFromEvent(ev))
-      }
-    })
-
-    element.current.addEventListener(('touchend'), (ev) => {
-      ev.preventDefault()
-      handleSwipeReleased(element.current, speed)
-    })
-
-    element.current.addEventListener(('mouseup'), (ev) => {
-      if (mouseIsClicked) {
+    if (!disableSwipe) {
+      element.current.addEventListener(('touchmove'), (ev) => {
         ev.preventDefault()
-        mouseIsClicked = false
-        handleSwipeReleased(element.current, speed)
-      }
-    })
+        handleMove(touchCoordinatesFromEvent(ev))
+      })
 
-    element.current.addEventListener(('mouseleave'), (ev) => {
-      if (mouseIsClicked) {
+      element.current.addEventListener(('mousemove'), (ev) => {
         ev.preventDefault()
-        mouseIsClicked = false
+        if (mouseIsClicked) {
+          handleMove(mouseCoordinatesFromEvent(ev))
+        }
+      })
+
+      element.current.addEventListener(('touchend'), (ev) => {
+        ev.preventDefault()
         handleSwipeReleased(element.current, speed)
-      }
-    })
+      })
+
+      element.current.addEventListener(('mouseup'), (ev) => {
+        if (mouseIsClicked) {
+          ev.preventDefault()
+          mouseIsClicked = false
+          handleSwipeReleased(element.current, speed)
+        }
+      })
+
+      element.current.addEventListener(('mouseleave'), (ev) => {
+        if (mouseIsClicked) {
+          ev.preventDefault()
+          mouseIsClicked = false
+          handleSwipeReleased(element.current, speed)
+        }
+      })
+    }
   }, []) // TODO fix so swipeRequirementType can be changed on the fly. Pass as dependency cleanup eventlisteners and update new eventlisteners.
 
   return (
